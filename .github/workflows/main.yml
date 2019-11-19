@@ -1,0 +1,27 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: macOS-latest
+
+    steps:
+    - uses: actions/checkout@v1
+      with:
+        submodules: recursive
+
+    - name: Setup Python environment
+      uses: actions/setup-python@v1.1.1
+      with:
+        python-version: '2.x'
+
+    - name: Install Dependencies
+      run: pip install -r pip_requirements.txt
+  
+    - name: Preparing Baler
+      run: echo 'export PATH=$PATH:'`dirname \`which bale\`` > .baler_env
+
+    - name: Building
+      run: fab build:outdir=~
